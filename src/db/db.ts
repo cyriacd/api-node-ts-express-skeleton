@@ -19,11 +19,16 @@ const dbType = config.get("DB_TYPE");
 const db = knex({
   client: "pg",
   connection: {
-    database: config.get("DB_NAME"),
-    host: config.get("DB_HOST"),
-    password: config.get("DB_PASSWORD"),
-    port: Number(config.get("DB_PORT")),
-    user: config.get("DB_USER"),
+    database: "cmm_interview",
+    // database: config.get("DB_NAME"),
+    host: "localhost",
+    // host: config.get("DB_HOST"),
+    password: "password",
+    // password: config.get("DB_PASSWORD"),
+    // port: Number(config.get("DB_PORT")),
+    port: 5432,
+    // user: config.get("DB_USER"),
+    user: "postgres",
   },
 });
 logger.info(db);

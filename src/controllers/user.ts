@@ -24,10 +24,11 @@ export default class UserController extends Controller {
   }
 
   private login = async (req: Request, res: Response) => {
-    const email = req.headers.email.toString();
-    const password = req.headers.password.toString();
+    const email = req.body.email.toString();
+    const password = req.body.password.toString();
     try {
       const user: User = await this.userData.getUserByEmail(email);
+      logger.info(user);
       logger.info(password);
       logger.info(user.getPassword());
       logger.info(bcrypt.compare(password, user.getPassword()));
@@ -40,7 +41,7 @@ export default class UserController extends Controller {
         Controller.sendErrorMessage(new Error("Unauthorized"), res, 401);
       }
     } catch (e) {
-      Controller.sendErrorMessage(e, res, 500);
+      Controller.sendErrorMessage(e, res, 401);
     }
   }
 
@@ -57,15 +58,12 @@ export default class UserController extends Controller {
     const password = req.headers.password.toString();
     const name = req.headers.name.toString();
     const hashPassword = await bcrypt.hash(password, 10);
-    try {
-      this.userData.createUser(new User(name, email, hashPassword));
-      // checks for password etc.
-      logger.info(`User register ${email}`);
-      res.json({
-        status: "user created",
-      });
-    } catch (e) {
-      Controller.sendErrorMessage(e, res);
-    }
+    this.userData.createUser(new User(name, email, hashPassword)).then((value) => {
+      logger.info(value);
+      res.json(value);
+    }).catch((e) => {
+      Controller.sendErrorMessage(new Error("Unable to create this user"), res);
+    });
+    // }
   }
 }

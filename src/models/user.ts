@@ -1,12 +1,14 @@
 export default class User {
-  private name: string;
-  private password: string;
-  private email: string;
+  public id: number;
+  public name: string;
+  public password: string;
+  public email: string;
 
-  constructor(name: string, email: string, password: string) {
+  constructor(name: string, email: string, password: string, id: number = -1) {
     this.email = email;
     this.name = name;
     this.password = password;
+    this.id = id;
   }
 
   public getPassword(): string {
@@ -15,6 +17,7 @@ export default class User {
 
   public getUserData(): any {
     return {
+      id: this.id,
       email: this.email,
       name: this.name,
     };
